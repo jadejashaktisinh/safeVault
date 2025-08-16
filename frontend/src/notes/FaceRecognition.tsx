@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
+import { useNavigate, useParams } from "react-router-dom";
 
 type FaceRecognitionProps = {
   mode?: "save" | "verify";
@@ -11,38 +12,15 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({
   userId,
 }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [status, setStatus] = useState<string>("");
-
-  // Load models and start video
-  useEffect(() => {
-    const loadModels = async () => {
-      try {
-        setStatus("Loading models...");
-        
-        await Promise.all([
-          faceapi.nets.faceRecognitionNet.loadFromUri('/models/face_recognition/'),
-          faceapi.nets.tinyFaceDetector.loadFromUri('/models/tiny_face_detector/'),
-          faceapi.nets.faceLandmark68Net.loadFromUri('/models/face_landmark_68/'),
-        ]);
-
-       
-        startVideo();
-      } catch (error) {
-        console.error("Error loading models:", error);
-      }
-    };
-
-    loadModels();
-  }, []);
-
+  const [status, setStatus] = useState<string>("Loading models...");
+  const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
+  const {id} = useParams();
   const startVideo = () => {
-    console.log("web cam")
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then((stream) => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
+        if (videoRef.current) videoRef.current.srcObject = stream;
       })
       .catch((err) => {
         console.error("Error accessing webcam:", err);
@@ -50,14 +28,44 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({
       });
   };
 
-  const handleCapture = async () => {
-    setStatus("Detecting...");
+  // Stop webcam
+  const stopVideo = () => {
+    if (videoRef.current?.srcObject) {
+      (videoRef.current.srcObject as MediaStream)
+        .getTracks()
+        .forEach((track) => track.stop());
+    }
+  };
 
+  // Load Face API models
+  useEffect(() => {
+    const loadModels = async () => {
+      try {
+        setStatus("Loading models...");
+        await Promise.all([
+          faceapi.nets.faceRecognitionNet.loadFromUri("/models/face_recognition/"),
+          faceapi.nets.tinyFaceDetector.loadFromUri("/models/tiny_face_detector/"),
+          faceapi.nets.faceLandmark68Net.loadFromUri("/models/face_landmark_68/"),
+        ]);
+        setStatus("Models loaded. Starting webcam...");
+        setLoading(false);
+        startVideo();
+      } catch (error) {
+        console.error("Error loading models:", error);
+        setStatus("🚫 Error loading models");
+      }
+    };
+    loadModels();
+  }, []);
+
+  // Handle Save / Verify
+  const handleCapture = async () => {
     if (!videoRef.current) {
       setStatus("🚫 No video reference");
       return;
     }
 
+    setStatus("Detecting face...");
     const detection = await faceapi
       .detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
@@ -69,42 +77,32 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({
     }
 
     const descriptor = detection.descriptor;
-    console.log(descriptor);
-    
-    if(mode === "save"){
+
+    if (mode === "save") {
+      // Save face to localStorage
       localStorage.setItem("faceDescriptor", JSON.stringify(Array.from(descriptor)));
-    }
-    else{
-      console.log(JSON.parse(localStorage.getItem("faceDescriptor") || "[]"));
-      const faceMatcher = new faceapi.FaceMatcher([new Float32Array(JSON.parse(localStorage.getItem("faceDescriptor") || "[]"))][0]);
-      const bestMatch = faceMatcher.findBestMatch(descriptor);
-      console.log(bestMatch);
-      setStatus(bestMatch.distance < 0.5 ? "✅ Face match!" : "❌ Face did not match.");
-    }
-
-    try {
-      // const res = await fetch(
-      //   mode === "save" ? "/api/save-face" : "/api/verify-face",
-      //   {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/json" },
-      //     body: JSON.stringify({ userId, descriptor }),
-      //   }
-      // );
-
-      //const data = await res.json();
-
-      if (mode === "save") {
-
-        setStatus("✅ Face saved successfully!");
-      } else {
-      
-        // setStatus("✅ Face match!");
+      setStatus("✅ Face saved successfully!");
+      stopVideo();
+    } else {
+      // Verify face
+      const savedDescriptor = localStorage.getItem("faceDescriptor");
+      if (!savedDescriptor) {
+        setStatus("❌ No saved face found!");
+        return;
       }
-    } catch (error) {
-      console.error("Error during face API:", error);
-      setStatus("🚫 Server error. Try again later.");
-     }
+      const floatDescriptor = new Float32Array(JSON.parse(savedDescriptor));
+      const labeledFaceDescriptors = new faceapi.LabeledFaceDescriptors("user", [floatDescriptor]);
+      const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
+
+      const bestMatch = faceMatcher.findBestMatch(descriptor);
+      setStatus(
+        bestMatch.distance < 0.6 ? "✅ Face match!" : "❌ Face did not match."
+      );
+
+      bestMatch.distance < 0.6 ? navigate(`/notes/${id}`) : "❌ Face did not match."
+
+      stopVideo();
+    }
   };
 
   return (
@@ -117,12 +115,17 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({
         ref={videoRef}
         autoPlay
         muted
+         width={320}
+  height={240}
         className="w-full rounded border-2 border-gray-300"
       />
 
       <button
         onClick={handleCapture}
-        className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded font-medium"
+        disabled={loading}
+        className={`mt-4 px-6 py-2 rounded font-medium text-white ${
+          loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"
+        }`}
       >
         {mode === "save" ? "Save Face" : "Verify Face"}
       </button>

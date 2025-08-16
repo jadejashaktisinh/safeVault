@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 interface PopupFormProps {
-  onClose: () => void;
+  onClose ? : () => void;
 }
 
 const PopupForm: React.FC<PopupFormProps> = ({ onClose }) => {
@@ -55,7 +55,7 @@ const PopupForm: React.FC<PopupFormProps> = ({ onClose }) => {
     }).then(res => {
       res.json().then(data => {
         console.log(data);
-        onClose();
+        // onClose();
       });
     }).catch(error => {
       console.error(error)

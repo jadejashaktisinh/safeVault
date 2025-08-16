@@ -13,7 +13,9 @@ const userSchema = new mongoose.Schema({
     password:{
         type:String
     },
-    notes:[{type: Schema.Types.ObjectId ,ref:'notes' }]
+    notes:[{type: Schema.Types.ObjectId ,ref:'notes' }],
+    folders:[{type: Schema.Types.ObjectId ,ref:'folders' }]
+
 
 });
 

@@ -1,18 +1,27 @@
-import { useState } from "react";
+// import { useState } from "react";
+import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
-import NotesConatiner from "./NotesConatiner";
-import PopupForm from "./PopUPForm";
+// import NoteDetails from "./NoteDetails";
+// import NotesConatiner from "./NotesConatiner";
+// import PopupForm from "./PopUPForm";
 
 export default function Page() {
 
-
-    const [isOpen,setIsOpen] = useState(false)
+  // const [isOpen,setIsOpen] = useState(false)
 
   return (
     <>
-        <Navbar onOpen={() => setIsOpen(true)}/>
-        <NotesConatiner/>
-        {isOpen && <PopupForm onClose={() => setIsOpen(false)}/>}
+      <div className="flex min-h-screen">
+        <div className="w-64">
+          <Navbar />
+        </div>
+        <div className="flex-1 p-4 overflow-auto">
+          
+         <Outlet></Outlet>
+        </div>
+      </div>
+
+      {/* <PopupForm /> */}
 
     </>
   )

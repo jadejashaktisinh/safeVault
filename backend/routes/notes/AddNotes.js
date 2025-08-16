@@ -26,7 +26,7 @@ const AddNotes = async (req, res) => {
             file_type: file.mimetype
           });
 
-          // Clean up the temporary file
+        
           fs.unlinkSync(file.path);
         } catch (uploadError) {
           console.error('Error uploading file:', uploadError);
@@ -34,13 +34,13 @@ const AddNotes = async (req, res) => {
         }
       });
 
-      // Wait for all file uploads to complete
+     
       await Promise.all(uploadPromises);
     }
 
     const { title, desc, isPrivate,uid } = req.body;
 
-    // Create and save the note as per the schema
+   
     const newNote = new NotesShema({
       title,
       desc,

@@ -1,46 +1,63 @@
 import { useEffect, useState } from "react";
-import NoteList from "./NoteList";
+import Note from "./Note";
+import Masonry from "react-masonry-css";
+
+
+const breakpointColumnsObj = {
+  default: 3,
+  1024: 2,
+  640: 1
+};
 
 export default function NotesConatiner() {
 
   const apiUrl = import.meta.env.VITE_BACKEND_URL;
-  const [notes,setNotes] = useState<{
-    isPrivate:boolean,
-    desc:string,
-    title:string,
-    files_url:any[],
+  const [notes, setNotes] = useState<{
+    isPrivate: boolean,
+    _id: string,
+    desc: string,
+    title: string,
+    files_url: any[]
+  }[] | null>(null)
 
+  useEffect(() => {
 
-  }[] | null>( null) 
+    fetch(`${apiUrl}/getnotes/${localStorage.getItem('_id')}/all`, {
+      method: "GET"
+    }).then(res => {
+      res.json().then(data => {
+        setNotes(data)
 
-  useEffect(()=>{
-
-      fetch(`${apiUrl}/getnotes/${localStorage.getItem('_id')}`,{
-        method:"GET"
-      }).then(res => {
-        res.json().then(data =>{
-            console.log(data);
-            setNotes(data)
-            
-        })
       })
-  },[])
+    })
+  }, [])
 
   return (
-    <div className=" p-5 grid grid-cols-[repeat(auto-fit,minmax(500px,6fr))] gap-3">
+    // <div className="columns-3 gap-3 p-5">
+    <Masonry
+      breakpointCols={breakpointColumnsObj}
+      className="flex gap-5"
+      columnClassName="space-y-5"
+    >
 
-    {
-      notes?.map((note)=>(
-          <NoteList isPrivate={note.isPrivate} desc={note.desc} files_url = {note.files_url} title = {note.title}/>
-      ))
-    }
+      {
+        notes?.map((note) => (
 
-        {/* <NoteList isPrivate={true} />
-        <NoteList/>
-        <NoteList/>
-        <NoteList/> */}
-    </div>
-    
+
+          <Note
+            title={note.title}
+            desc={note.desc}
+            files_url={note.files_url}
+            isPrivate={note.isPrivate}
+            id={note._id}
+
+          />
+        ))
+      }
+
+
+    </Masonry>
+
 
   )
 }
