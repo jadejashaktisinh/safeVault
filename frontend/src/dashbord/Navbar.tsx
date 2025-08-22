@@ -9,7 +9,7 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { name: "Home", icon: <Home size={20} />, path: "/" },
+  { name: "Home", icon: <Home size={20} />, path: "/home" },
   { name: "Notes", icon: <FileText size={20} />, path: "/notes" },
   { name: "Folders", icon: <Folder size={20} />, path: "/folders" },
   { name: "Trash", icon: <Trash2 size={20} />, path: "/trash" },

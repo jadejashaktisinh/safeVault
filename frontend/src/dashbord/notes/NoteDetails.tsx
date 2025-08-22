@@ -1,21 +1,42 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import PopupForm from "./PopUPForm";
 
 
 
 export default function NoteDetails() {
-    const handleUpdate = () => alert("Update note");
-    const handleDelete = () => alert("Delete note");
-     const { id } = useParams()
+    const apiUrl = import.meta.env.VITE_BACKEND_URL;
+
+    const { id } = useParams()
+    const [isOpen,setIsOpen] = useState<boolean>(false);
     const [note, setNote] = useState<{
         isPrivate: boolean,
         _id: string,
         desc: string,
         title: string,
-        files_url: any[]
+        files_url: {
+    file_type:string,
+    url:string
+  }[]
     } | null>(null)
-    const apiUrl = import.meta.env.VITE_BACKEND_URL;
+    
+    const handleUpdate = (id:string) => {
+        console.log(id);
+        setIsOpen(true)
+        
+    };
+    const handleDelete = (id:string) => {   
 
+            fetch(`${apiUrl}/deletenote/${id}`).then((res)=>{
+                    res.json().then((data)=>{
+                        if(data.success){
+                            alert("note deleted");
+                        }else{
+                            alert(data.msg);
+                        }
+                    })
+            })
+    };
     useEffect(() => {
 
         fetch(`${apiUrl}/getnotes/${id}/single`, {
@@ -32,7 +53,9 @@ export default function NoteDetails() {
     return (
          
 
-        <div className="flex min-h-screen bg-gray-50">
+       <>
+
+        {note &&  <div className="flex min-h-screen bg-gray-50">
 
             {/* Main content */}
             <div className="flex-1 p-6">
@@ -59,7 +82,7 @@ export default function NoteDetails() {
                                 {file.file_type === "image/jpeg" && (
                                     <img src={file.url} alt="note media" className="w-full h-64 object-cover" />
                                 )}
-                                {file.file_type === "video" && (
+                                {file.file_type === "video/mp4" && (
                                     <video controls className="w-full h-64 object-cover">
                                         <source src={file.url} type="video/mp4" />
                                     </video>
@@ -80,13 +103,13 @@ export default function NoteDetails() {
                     {/* Action Buttons */}
                     <div className="flex gap-4">
                         <button
-                            onClick={handleUpdate}
+                            onClick={()=>handleUpdate(note._id)}
                             className="px-6 py-3 bg-green-600 text-white rounded hover:bg-green-700"
                         >
                             Update Note
                         </button>
                         <button
-                            onClick={handleDelete}
+                            onClick={()=>handleDelete(note._id)}
                             className="px-6 py-3 bg-red-600 text-white rounded hover:bg-red-700"
                         >
                             Delete Note
@@ -94,7 +117,10 @@ export default function NoteDetails() {
                     </div>
                 </div>
             </div>
+            {isOpen && <PopupForm id={note._id} upTitle={note.title} upDesc={note.desc} files_url={note.files_url} isPrivate={note.isPrivate} onClose={()=>{setIsOpen(false)}}/>}
         </div>
+        }
+       </>
                  
     );
 }

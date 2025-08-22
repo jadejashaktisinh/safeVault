@@ -147,18 +147,19 @@ export default function Note({
     const mediaCounts = files_url.reduce(
     (acc, file) => {
       if (file.file_type === "image/jpeg") acc.images += 1;
-      else if (file.file_type === "video") acc.videos += 1;
+      else if (file.file_type === "video/mp4") acc.videos += 1;
       else if (file.file_type === "pdf") acc.pdfs += 1;
       else acc.others += 1;
       return acc;
     },
     { images: 0, videos: 0, pdfs: 0, others: 0 }
   );
-
+  console.log();
+  
 
   return (
     <Link to={isPrivate ? `/faceverify/${id}` : `/notes/${id}`}>
-    <div className="max-w-4xl mx-auto p-6 bg-gray-100 rounded-lg shadow-md m-2">
+    <div className="max-w-4xl mx-auto p-6 bg-gray-300 rounded-lg shadow-md m-2">
      
       <div className="flex justify-end gap-2 mb-4">
         <span className={`px-2 py-1 text-xs font-bold rounded `}>

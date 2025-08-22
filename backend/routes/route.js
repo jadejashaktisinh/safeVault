@@ -20,7 +20,7 @@ const upload = multer({dest:"uploads/"})
 routes.post("/signup",validationSignup,signup);
 routes.post("/login",validationLogin,login);
 routes.post("/addnote",upload.array('files', 10),AddNote);
-routes.post("/updatenote",updateNote);
+routes.post("/updatenote/:id",upload.array("files", 10),updateNote);
 
 routes.post("/addfolder",addFolder);
 
