@@ -2,20 +2,24 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema
 const userSchema = new mongoose.Schema({
     firstName:{
-        type:String
+        type:String,
+        required: true, trim: true 
     },
     lastName:{
-        type:String
+        type:String,
+        required: true, trim: true 
+
     },
     email:{
-        type:String
+        type:String,
+        required: true, unique: true, lowercase: true, trim: true 
     },
     password:{
-        type:String
+        type:String,
+        required: true
     },
-    notes:[{type: Schema.Types.ObjectId ,ref:'notes' }],
-    folders:[{type: Schema.Types.ObjectId ,ref:'folders' }]
-
+    token:String,
+    refreshToken:String
 
 });
 

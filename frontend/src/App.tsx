@@ -8,6 +8,8 @@ import NoteDetails from "./dashbord/notes/NoteDetails";
 import NotesConatiner from "./dashbord/notes/NotesConatiner";
 import HomePage from "./dashbord/home/Page";
 import FolderPage  from "./dashbord/folders/Page";
+import FolderDetails from "./dashbord/folders/FolderDetails";
+import ActivityPage from "./dashbord/activity log/Page";
 
 export default function App() {
   return (
@@ -23,9 +25,13 @@ export default function App() {
                   <Route path="notes" element={<NotesConatiner/>}/>
                   <Route path="notes/:id" element={<NoteDetails/>}/>
                   <Route path="folders" element={<FolderPage/>}/>
-                  <Route path="folders/:id" element={<NoteDetails/>}/>
+                  <Route path="folders/:id" element={<FolderDetails/>}/>
+                  <Route path="/activity" element={<ActivityPage/>}/>
+
           </Route>
-          <Route path="/faceverify/:id" element={<FaceRecognition mode="verify" userId={localStorage.getItem('_id')}/>}/>
+          <Route path="/facesave/" element={<FaceRecognition />}/>
+          <Route path="/faceverify/folder/:id" element={<FaceRecognition mode="verify" type="folders"  />}/>
+          <Route path="/faceverify/notes/:id" element={<FaceRecognition mode="verify" type="notes" />}/>
       </Routes>
     </>
    

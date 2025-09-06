@@ -1,8 +1,11 @@
 const userSchema = require('../../models/UserSchema')
 const NotesShema = require('../../models/NotesSchema')
+const AddInsideFolder = require("../folders/AddInsideFolder");
+const activityLoger = require("../../utils/ActivityLoger");
 const fs = require('fs');
 const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
+
 
 const AddNotes = async (req, res) => {
   try {
@@ -17,6 +20,7 @@ const AddNotes = async (req, res) => {
     if (req.files && req.files.length > 0) {
       const uploadPromises = req.files.map(async (file) => {
         try {
+          
           const result = await cloudinary.uploader.upload(file.path, {
             resource_type: "auto",
           });
@@ -38,10 +42,12 @@ const AddNotes = async (req, res) => {
       await Promise.all(uploadPromises);
     }
 
-    const { title, desc, isPrivate,uid } = req.body;
-
+    const { title, desc, isPrivate,folderId } = req.body;
+    const uid = req.user._id;
+    
    
     const newNote = new NotesShema({
+      userId:uid,
       title,
       desc,
       isPrivate,
@@ -52,9 +58,18 @@ const AddNotes = async (req, res) => {
 
     console.log(note)
 
-    await userSchema.findByIdAndUpdate(uid,{$push:{
-      notes: note._id
-    }})
+    activityLoger(uid,"create","note created successfully");
+    if(folderId){
+
+      req.body.folderId = folderId,
+      req.body.uploadId = note._id;
+      req.body.type = "notes";
+      console.log(folderId);
+      await AddInsideFolder(req,res);
+      return;
+    }
+      
+
 
     return res.status(201).json({
       success: true,

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Note from "./Note";
 import Masonry from "react-masonry-css";
 import PopupForm from "./PopUPForm";
+import AddButton from "../../components/AddButton";
 
 
 const breakpointColumnsObj = {
@@ -27,8 +28,9 @@ export default function NotesConatiner() {
 
   useEffect(() => {
 
-    fetch(`${apiUrl}/getnotes/${localStorage.getItem('_id')}/all`, {
-      method: "GET"
+    fetch(`${apiUrl}/getnotes/all`, {
+      method: "GET",
+      credentials: "include",
     }).then(res => {
       res.json().then(data => {
         setNotes(data)
@@ -43,8 +45,11 @@ export default function NotesConatiner() {
   return (
 
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">My Notes</h2>
-      <button onClick={() => { setIsOpen(true) }}>Add Note</button>
+      <div className="flex  justify-between  items-center mb-4">
+        <h2 className="text-2xl font-bold mb-4">My Notes</h2>
+        <AddButton onClick={() => { setIsOpen(true) }} text={"Add Note"} />
+      </div>
+
       <Masonry
         breakpointCols={breakpointColumnsObj}
         className="flex gap-5"
@@ -60,7 +65,7 @@ export default function NotesConatiner() {
               desc={note.desc}
               files_url={note.files_url}
               isPrivate={note.isPrivate}
-              id={note._id}
+              _id={note._id}
 
             />
           ))

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function LandingPage() {
     return (
         <>
@@ -26,16 +28,18 @@ export default function LandingPage() {
                                 <button
                                     className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#0b80ee] text-slate-50 text-sm font-bold leading-normal tracking-[0.015em]"
                                 >
-                                    <a href="/login">
+                                   
+                                    <Link to={"/login"}>
                                     <span className="truncate">Log In</span>
-                                    </a>
+                                    </Link>
+                                    
                                 </button>
                                 <button
                                     className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#e7edf4] text-[#0d151c] text-sm font-bold leading-normal tracking-[0.015em]"
                                 >
-                                    <a href="/signup">
+                                    <Link to="/signup">
                                     <span className="truncate">Sign Up</span>
-                                    </a>
+                                    </Link>
                                 </button>
                             </div>
                         </div>
@@ -64,7 +68,7 @@ export default function LandingPage() {
                                             <button
                                                 className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#0b80ee] text-slate-50 text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
                                             >
-                                                <a href="/login"><span className="truncate">Get Started</span></a>
+                                                <Link to="/login"><span className="truncate">Get Started</span></Link>
                                             </button>
 
                                         </div>
@@ -202,14 +206,14 @@ export default function LandingPage() {
                                     <p className="text-gray-400 text-lg mb-6">
                                         Start using SafeVault today to secure your thoughts with military-grade encryption and facial recognition.
                                     </p>
-                                    <a
-                                        href="/signup"
+                                    <Link
+                                        to="/signup"
                                         className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white text-lg font-semibold px-6 py-3 rounded-full shadow transition duration-300"
                                     >
                                         🔐 Get Started
-                                    </a>
+                                    </Link>
                                     <p className="text-gray-500 text-sm mt-6">
-                                        Already have an account? <a href="/login" className="text-indigo-400 hover:underline">Log in here</a>
+                                        Already have an account? <Link to="/login" className="text-indigo-400 hover:underline">Log in here</Link>
                                     </p>
                                 </div>
                             </footer>

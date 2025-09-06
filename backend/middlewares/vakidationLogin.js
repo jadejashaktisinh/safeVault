@@ -14,7 +14,9 @@ const schema = Joi.object({
             'string.empty': 'Password is required',
             'string.min': 'Password must be at least 8 characters',
             'string.max': 'Password must be at most 30 characters',
-        })
+        }),
+    remember:Joi.boolean()
+
 });
 
 

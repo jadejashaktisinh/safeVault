@@ -1,24 +1,18 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PopupForm from "./PopUPForm";
+import FileDisplay from "../../components/FileDisplay";
+import type { Note } from "../../types";
 
 
 
 export default function NoteDetails() {
     const apiUrl = import.meta.env.VITE_BACKEND_URL;
-
+    const navigate = useNavigate();
+    
     const { id } = useParams()
     const [isOpen,setIsOpen] = useState<boolean>(false);
-    const [note, setNote] = useState<{
-        isPrivate: boolean,
-        _id: string,
-        desc: string,
-        title: string,
-        files_url: {
-    file_type:string,
-    url:string
-  }[]
-    } | null>(null)
+    const [note, setNote] = useState<Note | null>(null)
     
     const handleUpdate = (id:string) => {
         console.log(id);
@@ -32,15 +26,16 @@ export default function NoteDetails() {
                         if(data.success){
                             alert("note deleted");
                         }else{
-                            alert(data.msg);
+                            navigate("/notes");
                         }
                     })
             })
     };
     useEffect(() => {
 
-        fetch(`${apiUrl}/getnotes/${id}/single`, {
-            method: "GET"
+        fetch(`${apiUrl}/getnotes/single/${id}`, {
+            method: "GET",
+            credentials:"include"
         }).then(res => {
             res.json().then(data => {
                 console.log(data);
@@ -48,14 +43,15 @@ export default function NoteDetails() {
 
             })
         })
-    }, [])
+    }, [isOpen])
 
     return (
          
 
        <>
 
-        {note &&  <div className="flex min-h-screen bg-gray-50">
+        {note && 
+         <div className="flex min-h-screen bg-gray-50">
 
             {/* Main content */}
             <div className="flex-1 p-6">
@@ -75,32 +71,9 @@ export default function NoteDetails() {
                         <p className="text-gray-800">{note?.desc}</p>
                     </div>
 
-                    {/* Media Gallery */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                        {note?.files_url.map((file, idx) => (
-                            <div key={idx} className="relative border rounded overflow-hidden bg-gray-100">
-                                {file.file_type === "image/jpeg" && (
-                                    <img src={file.url} alt="note media" className="w-full h-64 object-cover" />
-                                )}
-                                {file.file_type === "video/mp4" && (
-                                    <video controls className="w-full h-64 object-cover">
-                                        <source src={file.url} type="video/mp4" />
-                                    </video>
-                                )}
-                                {file.file_type === "pdf" && (
-                                    <embed
-                                        src={file.url}
-                                        type="application/pdf"
-                                        className="w-full h-64 rounded"
-                                    />
-                                )}
 
+                    <FileDisplay files={note.files_url} />
 
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Action Buttons */}
                     <div className="flex gap-4">
                         <button
                             onClick={()=>handleUpdate(note._id)}

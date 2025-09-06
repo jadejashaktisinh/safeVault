@@ -1,13 +1,13 @@
 const Joi = require('joi')
 
 const schema = Joi.object({
-    firstName: Joi.string().min(5).max(50).required().messages({
+    firstName: Joi.string().min(2).max(50).required().messages({
         'string.empty':'First name is required',
         'string.min': 'First name must be at least 2 characters',
         'string.max': 'First name must be at most 50 characters'
     }),
     
-    lastName: Joi.string().min(5).max(50).required().messages({
+    lastName: Joi.string().min(2).max(50).required().messages({
         'string.empty': 'Last name is required',
         'string.min': 'Last name must be at least 2 characters',
         'string.max': 'Last name must be at most 50 characters'
@@ -26,7 +26,8 @@ const schema = Joi.object({
             'string.empty': 'Password is required',
             'string.min': 'Password must be at least 8 characters',
             'string.max': 'Password must be at most 30 characters',
-        })
+        }),
+        remember:Joi.boolean()
 }).options({ abortEarly: false });
 
 

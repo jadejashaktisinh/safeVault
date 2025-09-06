@@ -10,19 +10,22 @@ interface PopupFormProps {
     file_type: string,
     url: string
   }[],
+  type:string,
+  upfolderId?:string
   onClose: () => void;
 }
 
 
 
-export default function useForm({id, upDesc, upTitle, isPrivate, files_url, onClose}:PopupFormProps) {
+export default function useForm({id, upDesc, upTitle, isPrivate, files_url, onClose,type,upfolderId}:PopupFormProps) {
     const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
     const [title, setTitle] = useState(upTitle ?? "");
+    const [folderId, setFolderId] = useState(upfolderId ?? null);
     const [desc, setDesc] = useState(upDesc ?? "");
     const [privateNote, setPrivateNote] = useState(isPrivate ?? false);
     const [inputFiles, setInputFiles] = useState<File[]>([]);
-
+    const [updateFiles,setUpdateFiles] =  useState<{ url: string, file_type: string }[]>(files_url ?? []);;
     const [files, setFiles] = useState<{ url: string, file_type: string }[]>(files_url ?? []);
     console.log(files);
 
@@ -42,6 +45,8 @@ export default function useForm({id, upDesc, upTitle, isPrivate, files_url, onCl
     };
 
     const handleDeleteFile = (index: number) => {
+        console.log("file index",index);
+        setUpdateFiles(prev => prev ? prev.filter((_, i) => i !== index) : []);
         setFiles(prev => prev ? prev.filter((_, i) => i !== index) : []);
         setInputFiles(prev => prev.filter((_, i) => i !== index));
     };
@@ -57,11 +62,19 @@ export default function useForm({id, upDesc, upTitle, isPrivate, files_url, onCl
         formData.append('desc', desc);
         formData.append('uid', String(localStorage.getItem('_id')));
         formData.append('isPrivate', String(privateNote));
+        if(updateFiles){
+                    formData.append('updateFiles', String(updateFiles));
+
+        }
+        if(folderId){
+            formData.append("folderId",folderId);
+        }
         inputFiles.forEach(file => {
             formData.append('files', file);
         });
-        fetch(`${apiUrl}/${id ? "updatenote/" + id : "addnote"}`, {
+        fetch(`${apiUrl}/${id ? `update${type}/` + id : `add${type}`}`, {
             method: "POST",
+            credentials:"include",
             body: formData
         }).then(res => {
             res.json().then(data => {
@@ -76,6 +89,7 @@ export default function useForm({id, upDesc, upTitle, isPrivate, files_url, onCl
     return {
         title, setTitle,
         desc, setDesc,
+        folderId, setFolderId,
         privateNote, setPrivateNote,
         inputFiles, files,
         handleFilesChange, handleDeleteFile, handleSubmit

@@ -4,12 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 
 type FaceRecognitionProps = {
   mode?: "save" | "verify";
-  userId: string | null;
+  type?:string,
 };
 
 const FaceRecognition: React.FC<FaceRecognitionProps> = ({
   mode = "save",
-  userId,
+  type,
 }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [status, setStatus] = useState<string>("Loading models...");
@@ -99,7 +99,7 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({
         bestMatch.distance < 0.6 ? "✅ Face match!" : "❌ Face did not match."
       );
 
-      bestMatch.distance < 0.6 ? navigate(`/notes/${id}`) : "❌ Face did not match."
+      bestMatch.distance < 0.6 ? navigate(`/${type}/${id}`) : "❌ Face did not match."
 
       stopVideo();
     }
