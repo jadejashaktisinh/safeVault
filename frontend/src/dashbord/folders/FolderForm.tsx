@@ -22,12 +22,10 @@ const FolderForm: React.FC<PopupFormProps> = ({ id, upDesc, upTitle, isPrivate, 
     privateNote, setPrivateNote, handleSubmit,
     folderId,setFolderId
   } = useForm( {id, upDesc, upTitle, isPrivate, onClose,type,upfolderId} );
-
   const folders = useAppSelector((state)=>state.folder.folders)
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center flex-col" style={{ width: "80%", marginLeft: "20%" }}>
-
-
       <div className="justify-between w-full flex border-b-2 pb-1 pt-2 bg-white p-5">
         <button
           onClick={onClose}
@@ -44,10 +42,8 @@ const FolderForm: React.FC<PopupFormProps> = ({ id, upDesc, upTitle, isPrivate, 
           {!id ? "Add" : "Update"}
         </button>
       </div>
-
-      <div className="bg-white w-full h-full p-5 overflow-auto relative rounded-none">
-       
-        <h2 className="text-3xl font-semibold mb-6">{!id ? "Add new" : "Update"} note</h2>
+      <div className="bg-white w-full h-full p-5 overflow-auto relative rounded-none">  
+        <h2 className="text-3xl font-semibold mb-6">{!id ? "Add new" : "Update"} folder</h2>
         <form className="space-y-6" >
           <TextInput title={title} setTitle={setTitle}/>
           <TextAreaInput desc={desc} setDesc={setDesc}/>
@@ -63,17 +59,14 @@ const FolderForm: React.FC<PopupFormProps> = ({ id, upDesc, upTitle, isPrivate, 
               }}
             >
               <option value="null">Select folder</option>
-
               {folders.map((folder) => (
                 <option key={folder._id} value={folder._id}>
                   {folder.title}
                 </option>
               ))}
             </select>
-
           </div>
           <div className="p-4">
-
             <PrivateCheckBox privateNote={privateNote} setPrivateNote={setPrivateNote} />
         </div>
         </form>

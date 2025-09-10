@@ -8,6 +8,7 @@ require('dotenv').config();
 
 
 const AddNotes = async (req, res) => {
+
   try {
     cloudinary.config({
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -20,17 +21,13 @@ const AddNotes = async (req, res) => {
     if (req.files && req.files.length > 0) {
       const uploadPromises = req.files.map(async (file) => {
         try {
-          
           const result = await cloudinary.uploader.upload(file.path, {
             resource_type: "auto",
           });
-
           files_url.push({
             url: result.secure_url,
             file_type: file.mimetype
           });
-
-        
           fs.unlinkSync(file.path);
         } catch (uploadError) {
           console.error('Error uploading file:', uploadError);
@@ -44,8 +41,6 @@ const AddNotes = async (req, res) => {
 
     const { title, desc, isPrivate,folderId } = req.body;
     const uid = req.user._id;
-    
-   
     const newNote = new NotesShema({
       userId:uid,
       title,
@@ -53,14 +48,10 @@ const AddNotes = async (req, res) => {
       isPrivate,
       files_url
     });
-
     const note  = await newNote.save();
-
-    console.log(note)
-
     activityLoger(uid,"create","note created successfully");
-    if(folderId){
 
+    if(folderId){
       req.body.folderId = folderId,
       req.body.uploadId = note._id;
       req.body.type = "notes";
@@ -68,9 +59,7 @@ const AddNotes = async (req, res) => {
       await AddInsideFolder(req,res);
       return;
     }
-      
-
-
+    
     return res.status(201).json({
       success: true,
       message: "Note created successfully",

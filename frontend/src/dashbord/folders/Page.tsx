@@ -5,15 +5,14 @@ import FolderForm from "./FolderForm";
 import AddButton from "../../components/AddButton";
 import { setFolders } from "../../features/folderSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-const breakpointColumnsObj = {
-  default: 3,
-  1024: 2,
-  640: 1
-};
 
 export default function Page() {
-
-
+  
+  const breakpointColumnsObj = {
+    default: 3,
+    1024: 2,
+    640: 1
+  };
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const folders = useAppSelector((state) => state.folder.folders)
   const dispatch = useAppDispatch();
@@ -21,7 +20,6 @@ export default function Page() {
   useEffect(() => {
 
     const apiUrl = import.meta.env.VITE_BACKEND_URL
-
     fetch(
       `${apiUrl}/getfolders/all`,
       {

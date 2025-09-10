@@ -8,12 +8,10 @@ const AddInsideFolder = async (req, res) => {
     if (!folderId || !uploadId) {
         return res.status(400).json({ msg: "data is missing", success: false });
     }
-
     try {
-
         let folder;
         if (type == "notes") {
-            await NoteSchema.findByIdAndUpdate(uploadId,{parentId:folderId})
+            await NoteSchema.findByIdAndUpdate(uploadId, { parentId: folderId })
             folder = await FolderSchema.findByIdAndUpdate(
                 folderId, {
                 $addToSet: {
@@ -22,7 +20,7 @@ const AddInsideFolder = async (req, res) => {
             }, { new: true });
         } else if (type == "folders") {
 
-            await FolderSchema.findByIdAndUpdate(uploadId,{ parentId:folderId,})
+            await FolderSchema.findByIdAndUpdate(uploadId, { parentId: folderId, })
             folder = await FolderSchema.findByIdAndUpdate(
                 folderId, {
                 $addToSet: {

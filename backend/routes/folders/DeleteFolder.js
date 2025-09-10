@@ -7,15 +7,10 @@ const DeleteFolder = async function (req, res) {
 
     try {
         const deletedFolder = await FolderSchema.findByIdAndDelete(id);
-
         addActivity(deletedFolder.userId,"delete",`deleted folder ${deletedFolder.title}`)
-
         res.status(200).json({ msg: "note deleted successfully", sucsess: true });
-    } catch (e) {
-        console.log(e);
-        
+    } catch (e) {  
         res.status(400).json({ msg: e.message, success: false });
-
     }
 
 }

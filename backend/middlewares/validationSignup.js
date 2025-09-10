@@ -34,8 +34,7 @@ const schema = Joi.object({
 const validationSignup = (req,res,next) => {
 
     console.log(req.body)
-    const {error , value} = schema.validate(req.body)
-    
+    const {error , value} = schema.validate(req.body)    
     if(error){
         res.status(401).send({success:false,message:{...error}})
     }else{

@@ -13,10 +13,8 @@ export default function FolderDetails() {
         1024: 2,
         640: 1
     };
-
     const navigate = useNavigate();
     const apiUrl = import.meta.env.VITE_BACKEND_URL;
-
     const { id } = useParams()
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [folder, setFolder] = useState<{
@@ -24,10 +22,9 @@ export default function FolderDetails() {
         _id: string,
         desc: string,
         title: string,
-        notes:Note[],
-        folders:Folder[]
+        notes: Note[],
+        folders: Folder[]
     } | null>(null)
-
 
     const handleUpdate = (id: string) => {
         console.log(id);
@@ -52,7 +49,7 @@ export default function FolderDetails() {
 
         fetch(`${apiUrl}/getfolders/single/${id}`, {
             method: "GET",
-            credentials:"include"
+            credentials: "include"
         }).then(res => {
             res.json().then(data => {
                 console.log(data);
@@ -60,18 +57,13 @@ export default function FolderDetails() {
 
             })
         })
-    }, [isOpen,id])
+    }, [isOpen, id])
     return (
-
         <>
-
             {
                 folder && <div className="flex min-h-screen bg-gray-50">
-
-                    {/* Main content */}
                     <div className="flex-1 p-6">
                         <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-6">
-                            {/* Top Section: Title + Tags */}
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
                                 <h1 className="text-3xl font-bold mb-4 md:mb-0">{folder?.title}</h1>
                                 <div className="flex gap-2">
@@ -80,8 +72,6 @@ export default function FolderDetails() {
                                     </span>
                                 </div>
                             </div>
-
-                            {/* Description */}
                             <div className="mb-6">
                                 <p className="text-gray-800">{folder?.desc}</p>
                             </div>
@@ -91,24 +81,20 @@ export default function FolderDetails() {
                                 className="flex gap-5"
                                 columnClassName="space-y-5"
                             >
-
                                 {folder.notes && folder.notes.map((note) => (
-
                                     <NoteCard _id={note._id} title={note.title} desc={note.desc} isPrivate={note.isPrivate} files_url={note.files_url} />
                                 ))}
                             </Masonry>
-                        <h2>Folder</h2>
+                            <h2>Folder</h2>
                             <Masonry
                                 breakpointCols={breakpointColumnsObj}
                                 className="flex gap-5"
                                 columnClassName="space-y-5"
                             >
-
                                 {folder.folders && folder.folders.map((folder) => (
                                     <FolderCard key={folder._id} {...folder} />
                                 ))}
                             </Masonry>
-                            {/* Action Buttons */}
                             <div className="flex gap-4">
                                 <button
                                     onClick={() => handleUpdate(folder._id)}
@@ -127,7 +113,6 @@ export default function FolderDetails() {
                     </div>
                     {isOpen && <FolderForm id={folder._id} isPrivate={folder.isPrivate} upDesc={folder.desc} upTitle={folder.title} onClose={() => { setIsOpen(false) }} />}
                 </div>
-
             }
         </>
     )

@@ -4,15 +4,13 @@ import Masonry from "react-masonry-css";
 import PopupForm from "./PopUPForm";
 import AddButton from "../../components/AddButton";
 
-
-const breakpointColumnsObj = {
-  default: 3,
-  1024: 2,
-  640: 1
-};
-
 export default function NotesConatiner() {
-
+  
+  const breakpointColumnsObj = {
+    default: 3,
+    1024: 2,
+    640: 1
+  };
   const apiUrl = import.meta.env.VITE_BACKEND_URL;
   const [isOpen, setIsOpen] = useState(false);
   const [notes, setNotes] = useState<{
@@ -58,20 +56,15 @@ export default function NotesConatiner() {
 
         {
           notes?.map((note) => (
-
-
             <Note
               title={note.title}
               desc={note.desc}
               files_url={note.files_url}
               isPrivate={note.isPrivate}
               _id={note._id}
-
             />
           ))
         }
-
-
       </Masonry>
       {isOpen && <PopupForm onClose={onClose} />}
     </div>

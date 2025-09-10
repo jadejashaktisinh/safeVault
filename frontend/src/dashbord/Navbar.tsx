@@ -25,15 +25,13 @@ export default function Navbar({
 
   return (
     <>
-      {/* Mobile toggle button */}
+
       <button
         className="p-2 md:hidden fixed top-4 left-4 z-50 bg-gray-800 text-white rounded-lg"
         onClick={() => setIsOpen(!isOpen)}
       >
         ☰
       </button>
-
-      {/* Sidebar */}
       <aside
         className={`fixed top-0 left-0 h-full bg-gray-900 text-white w-64 p-4 transform
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
@@ -54,16 +52,12 @@ export default function Navbar({
           ))}
         </nav>
       </aside>
-
-      {/* Overlay for mobile */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 md:hidden z-30"
           onClick={() => setIsOpen(false)}
         ></div>
       )}
-
-      {/* Main content */}
       <main className="flex-1 md:pl-64 p-4">{children}</main>
     </>
   );

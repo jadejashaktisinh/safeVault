@@ -18,8 +18,6 @@ export default function Login() {
 
   const navigate = useNavigate()
   function handleSubmit(e: React.FormEvent) {
-
-
     e.preventDefault();
     if (isDisabled) return;
     setIsDisabled(true);
@@ -48,8 +46,6 @@ export default function Login() {
             theme: "light",
             transition: Bounce,
           });
-
-
         } else {
           navigate('/notes')
         }

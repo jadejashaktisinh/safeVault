@@ -2,22 +2,13 @@ import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 
 export default function Layout() {
-
-
   return (
     <>
-     
-          <Navbar>
-        
+      <Navbar>
         <div className="flex-1 p-4 overflow-auto">
-          
-         <Outlet></Outlet>
-           
+          <Outlet></Outlet>
         </div>
-        </Navbar>
-     
-
-
+      </Navbar>
     </>
   )
 }

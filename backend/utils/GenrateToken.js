@@ -4,7 +4,6 @@ require("dotenv").config();
 
 const generateToken = async (uid,remember)=>{
 
-
     const secret = process.env.JWT_SECRET;
     const token =  jwt.sign({id:uid},secret,{expiresIn:"1d"});
     let refreshToken = null
@@ -14,7 +13,6 @@ const generateToken = async (uid,remember)=>{
     }else{
         await  User.findByIdAndUpdate(uid,{token:token})
     }
-
     return {token,refreshToken}
 
 }

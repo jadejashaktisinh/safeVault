@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 type FaceRecognitionProps = {
   mode?: "save" | "verify";
-  type?:string,
+  type?: string,
 };
 
 const FaceRecognition: React.FC<FaceRecognitionProps> = ({
@@ -15,7 +15,7 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({
   const [status, setStatus] = useState<string>("Loading models...");
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
-  const {id} = useParams();
+  const { id } = useParams();
   const startVideo = () => {
     navigator.mediaDevices
       .getUserMedia({ video: true })
@@ -28,7 +28,6 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({
       });
   };
 
-  // Stop webcam
   const stopVideo = () => {
     if (videoRef.current?.srcObject) {
       (videoRef.current.srcObject as MediaStream)
@@ -37,7 +36,6 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({
     }
   };
 
-  // Load Face API models
   useEffect(() => {
     const loadModels = async () => {
       try {
@@ -58,7 +56,6 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({
     loadModels();
   }, []);
 
-  // Handle Save / Verify
   const handleCapture = async () => {
     if (!videoRef.current) {
       setStatus("🚫 No video reference");
@@ -79,12 +76,10 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({
     const descriptor = detection.descriptor;
 
     if (mode === "save") {
-      // Save face to localStorage
       localStorage.setItem("faceDescriptor", JSON.stringify(Array.from(descriptor)));
       setStatus("✅ Face saved successfully!");
       stopVideo();
     } else {
-      // Verify face
       const savedDescriptor = localStorage.getItem("faceDescriptor");
       if (!savedDescriptor) {
         setStatus("❌ No saved face found!");
@@ -110,26 +105,22 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({
       <h2 className="text-2xl font-bold text-indigo-600">
         {mode === "save" ? "Register Face" : "Verify Face"}
       </h2>
-
       <video
         ref={videoRef}
         autoPlay
         muted
-         width={320}
-  height={240}
+        width={320}
+        height={240}
         className="w-full rounded border-2 border-gray-300"
       />
-
       <button
         onClick={handleCapture}
         disabled={loading}
-        className={`mt-4 px-6 py-2 rounded font-medium text-white ${
-          loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"
-        }`}
+        className={`mt-4 px-6 py-2 rounded font-medium text-white ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"
+          }`}
       >
         {mode === "save" ? "Save Face" : "Verify Face"}
       </button>
-
       {status && (
         <div className="mt-4 text-sm font-medium text-gray-700">{status}</div>
       )}

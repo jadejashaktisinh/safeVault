@@ -34,8 +34,6 @@ const PopupForm: React.FC<PopupFormProps> = ({ id, upDesc, upTitle, isPrivate, f
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center flex-col" style={{ width: "80%", marginLeft: "20%" }}>
-
-
       <div className="justify-between w-full flex border-b-2 pb-1 pt-2 bg-white p-5">
         <button
           onClick={onClose}
@@ -78,12 +76,9 @@ const PopupForm: React.FC<PopupFormProps> = ({ id, upDesc, upTitle, isPrivate, f
                 </option>
               ))}
             </select>
-
           </div>
           <div className="p-4">
-
             <PrivateCheckBox privateNote={privateNote} setPrivateNote={setPrivateNote} />
-
             <label className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
               Choose Image
               <input

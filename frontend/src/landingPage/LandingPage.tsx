@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 export default function LandingPage() {
     return (
         <>
-
             <div id="home" className="relative flex size-full min-h-screen flex-col bg-slate-50 group/design-root overflow-x-hidden" style={{ fontFamily: 'Inter, "Noto Sans", sans-serif' }}>
                 <div className="layout-container flex h-full grow flex-col">
                     <header className="fixed  w-full top-0 z-50 bg-white flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7edf4] px-10 py-3">
@@ -28,17 +27,17 @@ export default function LandingPage() {
                                 <button
                                     className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#0b80ee] text-slate-50 text-sm font-bold leading-normal tracking-[0.015em]"
                                 >
-                                   
+
                                     <Link to={"/login"}>
-                                    <span className="truncate">Log In</span>
+                                        <span className="truncate">Log In</span>
                                     </Link>
-                                    
+
                                 </button>
                                 <button
                                     className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#e7edf4] text-[#0d151c] text-sm font-bold leading-normal tracking-[0.015em]"
                                 >
                                     <Link to="/signup">
-                                    <span className="truncate">Sign Up</span>
+                                        <span className="truncate">Sign Up</span>
                                     </Link>
                                 </button>
                             </div>
@@ -57,7 +56,7 @@ export default function LandingPage() {
                                             <h1
                                                 className="text-[#0d151c] text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]"
                                             >
-                                               Your Private Vault. Secured by Your Face.
+                                                Your Private Vault. Secured by Your Face.
                                             </h1>
                                             <h2 className="text-[#0d151c] text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal">
                                                 SafeVault provides secure and reliable cloud storage solutions for individuals and businesses. Protect your data with advanced security features and access it
@@ -218,7 +217,7 @@ export default function LandingPage() {
                                 </div>
                             </footer>
 
-                      
+
                         </div>
                     </div>
                 </div>

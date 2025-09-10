@@ -84,7 +84,6 @@ export default function Signup() {
         </div>
 
         <form className="space-y-5" onSubmit={handleSubmit}>
-
           <FormInput
             htmlFor="fname"
             label="First Name"
@@ -94,7 +93,6 @@ export default function Signup() {
               setFormData({ ...formData, firstName: e.target.value })
             }
           />
-
           <FormInput
             htmlFor="lname"
             label="Last Name"
@@ -127,21 +125,14 @@ export default function Signup() {
             showPassword={showPassword}
             onClick={() => setShowPassword(!showPassword)}
           />
-
-
-
           <RememberMe 
           value={formData.remember} 
           onChange={(e)=>{
             setFormData({...formData,remember:e.target.checked})
           }}
           />
-
           <FormSubmitButton isDisabled={isDisabled} text="Sign Up" />
-
         </form>
-
-
       <FormFooter text="Log in" href="/login"/>
       </div>
       <ToastContainer />

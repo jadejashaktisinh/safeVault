@@ -21,9 +21,7 @@ const schema = Joi.object({
 
 
 const validationLogin = (req,res,next) => {
-
     const {error , value} = schema.validate(req.body)
-    
     if(error){
         res.status(401).send({success:false,message:error.details[0].message})
         console.log({...error})
